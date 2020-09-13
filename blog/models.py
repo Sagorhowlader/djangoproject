@@ -1,6 +1,6 @@
 from django.db import models
 
-class Blogpost(models.Model):
-        title= models.TextField()
-        context = models.TextField(null =True, blank= True)
 
+class BlogPost(models.Model):
+    title = models.TextField()
+    content = models.TextField(null=True, blank=True)
