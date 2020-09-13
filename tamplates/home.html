@@ -1,4 +1,8 @@
 {% extends "base.html" %}
 {% block start %}
-<p> Hi i am there </p>
+{{user}}
+{{user.is_authenticated}}
+{% for i in mylist %}
+<li>{{i}}</li>
+{% endfor %}
 {% endblock %}
