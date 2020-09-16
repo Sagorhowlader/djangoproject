@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from .models import BlogPost
 from django.http import Http404
-from .forms import  Blog_Create_Post
+from .forms import  BloPostModelForm
+from django.contrib.admin.views.decorators import staff_member_required
 
 
 # Create your views here.
@@ -25,15 +26,28 @@ def blog_post_list_view(request):
     context = {"object_list": qs}
     return render(request, template_name, context)
 
-
+@staff_member_required
 def blog_post_create_view(request):
     # create objects
     # ? use a form
-    form = Blog_Create_Post(request.POST or None)
-
+    form = BloPostModelForm(request.POST or None)
+    print(form)
     if form.is_valid():
-        obj = Blog_Create_Post.objects.create(**form.cleaned_data)
-        form = Blog_Create_Post()
+        obj=form.save(commit=False)
+        obj.user = request.user
+        obj.save()
+        # print(form.cleaned_data)
+        # title = form.cleaned_data['title']
+        # content= form.cleaned_data['content']
+        # slug= form.cleaned_data['slug']
+        # obj= BlogPost.objects.create(title=title,content=content,slug=slug)
+        # obj=BlogPost()
+        # obj.title
+        # =title
+        # obj.content=content
+        # obj.slug=slug
+        # obj.save()
+        form=BloPostModelForm()
     template_name = 'form.html'
     context = {"form": form}
     return render(request, template_name, context)
